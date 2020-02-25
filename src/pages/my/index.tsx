@@ -5,15 +5,17 @@ import router from 'umi/router';
 
 import { IModelGlobal } from '@/types';
 
-import styles from './index.css';
+import styles from '../index.css';
 
-const mapStateToProps = ({ app }: IModelGlobal) => {
-  return { app };
+const mapStateToProps = (models: IModelGlobal) => {
+  console.log('=== mapStateToProps', models);
+  const { my } = models;
+  return { app: my };
 };
 
 type ReduxProps = ReturnType<typeof mapStateToProps>;
 
-class Home extends BaseComponent<ReduxProps> {
+class My extends BaseComponent<ReduxProps> {
   componentDidMount() {
     this.props.app;
   }
@@ -21,13 +23,13 @@ class Home extends BaseComponent<ReduxProps> {
   onCount = () => {
     const { a } = this.props.app;
     this.props.dispatch({
-      type: 'app/updateState',
+      type: 'my/updateState',
       payload: { a: a + 1 },
     });
   };
 
-  onMy = () => {
-    router.push('/my');
+  toHome = () => {
+    router.push('/');
   };
 
   render() {
@@ -43,11 +45,11 @@ class Home extends BaseComponent<ReduxProps> {
             <a href="https://umijs.org/guide/getting-started.html">Getting Started</a>
           </li>
           <div onClick={this.onCount}>test {a}</div>
-          <div onClick={this.onMy}>Goto My</div>
+          <div onClick={this.toHome}>Goto Home</div>
         </ul>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(My);
